@@ -3,7 +3,10 @@ package chand.security.payload.request;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,13 +23,13 @@ public class UserRequest {
 	private String email;
 	
 	@NotBlank
-	@Size(min = 6,max = 30,message = "Password should be minimum 6 characters and maximum 30 characters")
+	@Size(min = 6,max = 30,message = "Password should be minimum 6 characters and maximum 30 characters length")
 	private String password;
 	
 	@NotBlank
 	private String username;
 	
-	@Size(min = 1,message="Atleast one role required")
+	@NotEmpty(message="Atleast one role required")
 	private Set<String> roles;
 	
 	@JsonProperty(defaultValue = "true")
