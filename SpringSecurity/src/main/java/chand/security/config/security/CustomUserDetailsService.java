@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import chand.security.dao.UserInfoRepository;
 import chand.security.entity.UserInfo;
 import chand.security.entity.UserRole;
+import chand.security.exception.FailedToSaveException;
+import chand.security.exception.UserAlreadyExistedException;
 import chand.security.payload.request.UserRequest;
 import chand.security.payload.request.UserResponse;
 
@@ -43,7 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		String email = userRequest.getEmail().trim();
 		List<UserInfo> users = this.userInfoRepository.findByEmail(userRequest.getEmail());
 		if (users.size() > 0) {
-			throw new RuntimeException("User already existed with the current email: " + userRequest.getEmail());
+			throw new UserAlreadyExistedException("User already existed with the current email: " + userRequest.getEmail());
 		}
 		String username = userRequest.getUsername().trim();
 		List<UserRole> roles = userRequest.getRoles().stream().map(x -> x.toUpperCase().trim())
@@ -59,7 +61,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		UserInfo savedUser = this.userInfoRepository.save(user);
 		if (savedUser == null) {
-			throw new RuntimeException("Unable to create user please try again!");
+			throw new FailedToSaveException("Unable to create user please try again!");
 		}
 		
 		UserResponse userResponse = new UserResponse();
