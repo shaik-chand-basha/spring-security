@@ -21,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityWebConfig {
 
 	@Autowired
-	private DataSource dataSource;
+	private CustomUserDetailsService userDetailsService;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,17 +43,17 @@ public class SecurityWebConfig {
 //		UserDetails userDetails = User.withDefaultPasswordEncoder().username("chand").password("chand")
 //				.authorities("User").build();
 
-		http.userDetailsService(users(dataSource));
+		http.userDetailsService(userDetailsService);
 		return http.build();
 	}
 
-	public InMemoryUserDetailsManager getInMemoryUserDetailsManager() {
-		InMemoryUserDetailsManager detailsManager = new InMemoryUserDetailsManager();
-		UserDetails userDetails = User.withUsername("chand").password(passwordEncoder().encode("chand"))
-				.username("chand").authorities("USER").build();
-		detailsManager.createUser(userDetails);
-		return detailsManager;
-	}
+//	public InMemoryUserDetailsManager getInMemoryUserDetailsManager() {
+//		InMemoryUserDetailsManager detailsManager = new InMemoryUserDetailsManager();
+//		UserDetails userDetails = User.withUsername("chand").password(passwordEncoder().encode("chand"))
+//				.username("chand").authorities("USER").build();
+//		detailsManager.createUser(userDetails);
+//		return detailsManager;
+//	}
 
 //	@Bean
 //	 UserDetailsManager users(DataSource dataSource) {
@@ -64,15 +64,15 @@ public class SecurityWebConfig {
 //		return detailsManager;
 //	}
 
-	@Bean
-	UserDetailsManager users(DataSource dataSource) {
-
-		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-		users.setUsersByUsernameQuery("select username,password, enabled from user_info where username = ?");
-		users.setAuthoritiesByUsernameQuery(
-				"select u.username,role.role from user_info u inner join user_role role on role.fk_user_id=u.id where u.username = ?");
-		return users;
-	}
+//	@Bean
+//	UserDetailsManager users(DataSource dataSource) {
+//
+//		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+//		users.setUsersByUsernameQuery("select username,password, enabled from user_info where username = ?");
+//		users.setAuthoritiesByUsernameQuery(
+//				"select u.username,role.role from user_info u inner join user_role role on role.fk_user_id=u.id where u.username = ?");
+//		return users;
+//	}
 
 //	@Bean
 //	public PasswordEncoder passwordEncoder() {
