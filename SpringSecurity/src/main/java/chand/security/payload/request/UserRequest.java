@@ -4,9 +4,8 @@ import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +18,10 @@ import lombok.Setter;
 @Setter
 public class UserRequest {
 
+	
+	
 	@NotBlank
+	@Pattern(regexp = ".+@.+[.]{1}.+",message="Email is invalid")
 	private String email;
 	
 	@NotBlank

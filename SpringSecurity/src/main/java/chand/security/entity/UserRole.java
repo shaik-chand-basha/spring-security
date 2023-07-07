@@ -10,14 +10,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="user_role")
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserRole  {
 
+	public UserRole(String role) {
+		this.role=role;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
