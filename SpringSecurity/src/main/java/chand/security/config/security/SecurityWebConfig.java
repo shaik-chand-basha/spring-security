@@ -27,8 +27,9 @@ public class SecurityWebConfig {
 //			}
 //		});
 //		http.authorizeHttpRequests().anyRequest().authenticated();
+		http.csrf().disable();
 		http.authorizeHttpRequests(request -> {
-			request.antMatchers("/notices", "/contact").permitAll()
+			request.antMatchers("/notices", "/contact","/user/**").permitAll()
 					.antMatchers("/myLoans", "/myBalance", "/myCards", "/myAccount").authenticated();
 		}).
 		formLogin().defaultSuccessUrl("/myAccount", false)
