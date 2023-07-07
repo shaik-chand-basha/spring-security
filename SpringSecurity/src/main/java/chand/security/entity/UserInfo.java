@@ -68,6 +68,7 @@ public class UserInfo implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
+		System.out.println(this.enabled);
 		return this.enabled;
 	}
 

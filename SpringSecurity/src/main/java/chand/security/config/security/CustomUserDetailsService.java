@@ -3,6 +3,7 @@ package chand.security.config.security;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,8 +25,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("User not found with username: " + username);
 		}
 		UserInfo userInfo = users.iterator().next();
-		return new org.springframework.security.core.userdetails.User(userInfo.getUsername(), userInfo.getPassword(),
+		User user = new org.springframework.security.core.userdetails.User(userInfo.getUsername(), userInfo.getPassword(),userInfo.getEnabled(),userInfo.isAccountNonExpired(),userInfo.isCredentialsNonExpired(),userInfo.isAccountNonLocked(),
 				userInfo.getAuthorities());
+		
+		return user;
 	}
 
 }
