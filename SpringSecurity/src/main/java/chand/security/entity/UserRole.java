@@ -20,7 +20,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserRole  {
 
-	public UserRole(String role) {
+	public UserRole(String role,UserInfo user) {
+		this.user = user;
 		this.role=role;
 	}
 	

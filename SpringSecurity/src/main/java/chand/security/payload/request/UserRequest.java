@@ -2,6 +2,7 @@ package chand.security.payload.request;
 
 import java.util.Set;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -32,9 +33,8 @@ public class UserRequest {
 	private String username;
 	
 	@NotEmpty(message="Atleast one role required")
-	private Set<String> roles;
+	private Set< @NotBlank String> roles;
 	
-	@JsonProperty(defaultValue = "true")
 	private boolean enabled;
 	
 }

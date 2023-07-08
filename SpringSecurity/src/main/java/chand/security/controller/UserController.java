@@ -21,11 +21,14 @@ public class UserController {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
-	
+
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest){
-	 UserResponse createdUser = this.userDetailsService.createUser(userRequest);
-	 return new ResponseEntity<UserResponse>(createdUser,HttpStatus.CREATED);
-	}
+	public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
+
 	
+		UserResponse createdUser = this.userDetailsService.createUser(userRequest);
+
+		return new ResponseEntity<UserResponse>(createdUser, HttpStatus.CREATED);
+	}
+
 }

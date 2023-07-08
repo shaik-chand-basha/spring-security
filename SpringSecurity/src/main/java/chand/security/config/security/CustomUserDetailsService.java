@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import chand.security.dao.UserInfoRepository;
@@ -23,6 +24,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserInfoRepository userInfoRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,6 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		User user = new org.springframework.security.core.userdetails.User(userInfo.getUsername(),
 				userInfo.getPassword(), userInfo.getEnabled(), userInfo.isAccountNonExpired(),
 				userInfo.isCredentialsNonExpired(), userInfo.isAccountNonLocked(), userInfo.getAuthorities());
+		System.out.println(user.getAuthorities().size());
 
 		return user;
 	}
@@ -48,16 +53,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UserAlreadyExistedException("User already existed with the current email: " + userRequest.getEmail());
 		}
 		String username = userRequest.getUsername().trim();
-		List<UserRole> roles = userRequest.getRoles().stream().map(x -> x.toUpperCase().trim())
-				.map(x -> new UserRole(x)).collect(Collectors.toList());
 		String password = userRequest.getPassword();
+		password = passwordEncoder.encode(password);
 
 		UserInfo user = new UserInfo();
-		user.setRoles(roles);
 		user.setEmail(email);
 		user.setUsername(username);
 		user.setEnabled(userRequest.isEnabled());
 		user.setPassword(password);
+		List<UserRole> roles = userRequest.getRoles().stream().map(x -> x.toUpperCase().trim())
+				.map(x -> new UserRole(x,user)).collect(Collectors.toList());
+		user.setRoles(roles);
 		
 		UserInfo savedUser = this.userInfoRepository.save(user);
 		if (savedUser == null) {
